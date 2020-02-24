@@ -7,6 +7,10 @@ const tableSchema = new mongoose.Schema({
     minlength: 3,
     required: true,
   },
+  createdOn: {
+    type: Date,
+    default: Date.now
+  },
   goals: [
     {
       type: mongoose.Schema.Types.ObjectId,

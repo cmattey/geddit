@@ -4,7 +4,11 @@ const uniqueValidator = require('mongoose-unique-validator')
 const goalSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: User
+    ref: 'User'
+  },
+  createdOn: {
+    type: Date,
+    default: Date.now
   },
   title: {
     type: String,
@@ -16,12 +20,24 @@ const goalSchema = new mongoose.Schema({
   },
   isAchieved: {
     type: Boolean,
-    required: true
+    required: true,
+    default: false,
   },
   goalSpan: {
       type: String,
-      required: true
   },
+  parentTable: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Table'
+  }
+})
+
+goalSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
 })
 
 goalSchema.plugin(uniqueValidator)
