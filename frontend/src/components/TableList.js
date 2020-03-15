@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react'
 import TableService from '../services/tables'
+import GoalList from './GoalList'
 
 const TableList = ({ user }) => {
 
-  const [tables, setTables] = useState([])
+  const [tables, setTables] = useState(null)
 
   useEffect(() => {
 
@@ -24,7 +25,16 @@ const TableList = ({ user }) => {
   if(user && tables){
     return(
         <div>
-          {tables.map(tableID => <div key={tableID}> {tableID} </div>) : null }
+          {tables.map(tableID =>
+            <table key={tableID} style={{border:'1px solid #dddddd'}}>
+            <tbody>
+            <tr>
+              <th>TABLE: {tableID}</th>
+            </tr>
+            <GoalList user={user} tableID={tableID} />
+            </tbody>
+            </table>
+          )}
         </div>
       )
   }
