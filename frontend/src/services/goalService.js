@@ -40,4 +40,19 @@ const addGoal = async (newGoalObj) => {
   }
 }
 
-export default { getGoalsList, getGoalsByID, addGoal }
+const deleteGoal = async (id) => {
+  try{
+
+    const config = {
+      headers: {Authorization: tokenService.getToken()}
+    }
+    
+    const response = await axios.delete(`${baseGoalUrl}/${id}`, config)
+    return response
+
+  } catch (exception){
+    console.error("Excpetion occured in delete Goal service:", exception)
+  }
+}
+
+export default { getGoalsList, getGoalsByID, addGoal, deleteGoal }
