@@ -27,7 +27,6 @@ goalsRouter.get('/:id', async (request, response) => {
   }
 })
 
-
 goalsRouter.post('/', async (request, response) => {
 
   try{
@@ -51,7 +50,37 @@ goalsRouter.post('/', async (request, response) => {
 
     return response.status(201).json(savedGoal)
   } catch (exception) {
-    console.error("Exception occured in table post: ", exception)
+    console.error("Exception occured in goal post: ", exception)
+  }
+})
+
+goalsRouter.delete('/:id', async (request, response) => {
+  // Currently allowing any logged in user to delete a goal
+  // Need to modify API end point structure to only allow particular users access to a resource
+  // Or research better structure
+  try{
+
+    const decodedToken = jwt.verify(request.token, config.SECRET)
+
+    if (!request.token || !decodedToken.id){
+      return response.status(401).json({'error':'token missing or invalid'})
+    }
+
+    goal = await Goal.findById(request.params.id)
+
+    parentTable = await Table.findById(goal.parentTable)
+
+    goalIndex = parentTable.goals.indexOf(request.params.id)
+
+    parentTable.goals.splice(goalIndex, 1)
+
+    await parentTable.save()
+    await Goal.findByIdAndRemove(request.params.id)
+
+    return response.status(204).json({'Success': 'successfully deleted'})
+
+  } catch (exception) {
+    console.error("Exception occured in goal delete backend: ", exception)
   }
 })
 
