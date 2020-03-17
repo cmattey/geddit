@@ -4,7 +4,7 @@ import GoalList from './GoalList'
 
 const TableList = ({ user }) => {
 
-  const [tables, setTables] = useState(null)
+  const [tables, setTables] = useState([])
 
   useEffect(() => {
 
@@ -20,6 +20,12 @@ const TableList = ({ user }) => {
       }
     }
     loadTables()
+
+    return function cleanup(){
+      // Need to update this to avoid memory leak and cancel all subscriptions and async tasks in useEffect
+      setTables([])
+    }
+
   },[user])
 
   if(user && tables){
