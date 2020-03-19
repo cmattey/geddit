@@ -25,6 +25,9 @@ mongoose.connect(config.MONGODB_URI, {useCreateIndex: true, useNewUrlParser: tru
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('frontend/build'))
+app.get('*', (request, response) => {
+	response.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
 
 app.use(middleware.tokenExtractor)
 app.use('/api/users', usersRouter)
