@@ -9,7 +9,8 @@
 /coverage
 
 # production
-/build
+# commented build, to be accessible during deployement
+#/build
 
 # misc
 .DS_Store
