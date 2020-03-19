@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
@@ -25,9 +26,6 @@ mongoose.connect(config.MONGODB_URI, {useCreateIndex: true, useNewUrlParser: tru
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('frontend/build'))
-app.get('*', (request, response) => {
-	response.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
-});
 
 app.use(middleware.tokenExtractor)
 app.use('/api/users', usersRouter)
@@ -38,5 +36,9 @@ app.use('/api/goals', goalsRouter)
 app.get('/api', (request, response) => {
   response.status(200).json({"Message": "Success API"})
 })
+
+app.get('*', (request, response) => {
+	response.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
 
 module.exports = app;
